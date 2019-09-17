@@ -66,7 +66,7 @@ public class Main {
 //		PrintWriter out = new PrintWriter("2.txt");
 		PrintWriter out = new PrintWriter(args[1]);
 		// Scanner in = new Scanner(System.in);
-		String [] Address = new String [10];
+		String [] Address = new String [5000];
 		for(int j=0;in.hasNext();j++)
 		{
 			//Address [i] = new String();
