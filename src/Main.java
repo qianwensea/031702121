@@ -13,7 +13,7 @@ public class Main {
 
 	public static List<Map<String, String>> addressResolution(String address) {
 
-		String regex = "(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^镇]+镇|.+乡)?(?<road>[^路].+路|.+巷|.+街)?(?<numb>[\\d]+号|)(?<village>.*)";
+		String regex = "(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^镇]+镇|.+街道|.*?乡)?(?<road>[^路].+路|.+巷|.+街|.*?道)?(?<numb>[\\d]+号|)(?<village>.*)";
 		Matcher m = Pattern.compile(regex).matcher(address);
 		String province = null, city = null, county = null, town = null, road = null, numb = null, village = null;
 		List<Map<String, String>> table = new ArrayList<Map<String, String>>();
@@ -40,7 +40,6 @@ public class Main {
 		table.add(row);
 		return table;
 	}
-
 	public static String phone_number(String num) {
 		if (num == null || num.length() == 0) {
 			return "";
@@ -78,11 +77,12 @@ public class Main {
 			len++;
 		}
 		out.print("[\r\n");
+		
 		for(int i=0;i<len;i++) {
 			String address = Address[i];
-			
+			String dff = "1";
 			String diff = address.substring(0, address.indexOf("!"));
-			//System.out.println(diff);
+//			System.out.println(diff);
 			String address_1 = address.substring(address.indexOf("!") + 1);
 			String name = address_1.substring(0, address_1.indexOf(","));
 			String address_2 = address_1.substring(address_1.indexOf(",") + 1);
@@ -94,14 +94,25 @@ public class Main {
 			out.print("\"手机\":" + "\"" + mobile + "\",");
 			out.print("\"地址\":[");
 			List<Map<String, String>> table = addressResolution(address_4);
-			// System.out.println(table);
 			out.print("\"" + table.get(0).get("province") + "\",");
 			out.print("\"" + table.get(0).get("city") + "\",");
 			out.print("\"" + table.get(0).get("county") + "\",");
 			out.print("\"" + table.get(0).get("town") + "\",");
-			out.print("\"" + table.get(0).get("road") + "\",");
-			out.print("\"" + table.get(0).get("numb") + "\",");
-			out.print("\"" + table.get(0).get("village") + "\"");
+			if(diff.equals(dff))
+			{
+				
+				out.print("\"" + table.get(0).get("road") + table.get(0).get("numb") + table.get(0).get("village")+"\"");
+			}
+			
+			else
+			{
+				//List<Map<String, String>> table = addressResolution(address_4);
+				
+				out.print("\"" + table.get(0).get("road") + "\",");
+				out.print("\"" + table.get(0).get("numb") + "\",");
+				out.print("\"" + table.get(0).get("village") + "\"");
+			}
+			// System.out.println(table);
 			if(i!=len-1)
 			out.print("]},\r\n");
 			else
